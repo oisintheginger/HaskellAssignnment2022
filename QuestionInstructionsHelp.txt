@@ -1,0 +1,72 @@
+Q1. Define a function is_square that takes an integer (positive) and returns True if the number is the square of an integer number. DO NOT use the SQRT function.
+A1. Basically a square root of a number N is another number N1 which is less than or equal to N. We need to iterate all the numbers below N for possible values of N1 (e.g. [1..N]) and check if whether when multiplied by itself does it equal to N. We can use list comprehension to iterate through the numbers and then check that the length of the resulting list equals 1.
+    -> check that the length of [a| a<-[1..n], <BOOLEAN EXPRESSION HERE>] is equal to 1
+
+
+Q2. Define a function freq_letter_pc, that displays the percentage of each letter instead of the number of occurrences (do not count symbols other than [a..z]). Transform the text in small case first.
+A2. This solution is probably best done by mapping a function over a list. It may also be useful to import the Set library for this (make your life easier). 
+    -> First create a set of all the letters that occur in the sentence. There is no point in counting letters that aren't in the original sentence. To do this pass the original string ([Char]) into a function that converts the string to a set and then back into a string ([Char]).
+    -> The resulting list should then be mapped over by another function, that takes a letter and the original string. (By mapping we are running it for each letter in the Set-list). 
+    -> This second function will then return a tuple with the original letter and the sum of occurrences of a letter within the original string.
+        - e.g. (letter , sum [ 1 |character <- characterSet, character==letter] * 100/ (sum [1 | _ <-characterSet]))
+        - mapping syntax is as follows: map (\element_in_list -> function element_in_list) list
+
+Q3. 
+    A) get_city_above n – to get all the names of the cities with a population above n (=input)
+    B) get_city country_name – to get all the cities given a country_name
+    C) num_city– to list all the country and for each country the number of cities in each country.
+A3. 
+    A) 
+        -> Define a utility function that gets the 3rd element of a tuple:
+            - for example to get (1,3,TargetEl,[0,0,0]) we should  use: getThird(_,_,Target,_) = Target
+        -> Use list comprehension to go through the list of cities: e.g. [country|country <- countriesList, <BOOLEAN EXPRESSION HERE>]
+    B & C)
+        -> Repeat the same principles
+
+Q4. Euclidean distance between two lists  [5]
+A4. This is an easy one, but you can go about it in two ways. The simpler way is to zip the two input lists together. (e.g. zip vector1List vector2List). This returns a list of tuples with elements of the same index paired together. We should then map over this list using the fst and snd functions to access the first and second element of the tuples respectively. We could also use list comprehension to do it. (e.g. [((fst pair) - (snd pair))*((fst pair) - (snd pair)) | pair <- listOfTuples]). We should then sum this list and find the square root of the result using the sqrt function.
+
+Q5. Language Identification
+A5. To do this one its actually quite straight forward. Using the frequency of letters function, we parse an input text to identify the frequency of the letters. We then iterate through this resulting list to get number element i.e. to get the 12.3 from ('a', 12.3) we need [b | (a,b) <- (letter_freq_function originalTextString)]. We then can use the euclidean distance formula to determine whether it is nearer to the english or portuguese list. we can use an if then else statement to do this. e.g. if (euclidean_distance eng letterFreq) < (euclidean_distance pt letterFreq) then 'This is Portuguese' else 'This is English'
+
+Q6. Caesar Cipher [5] 
+A5. This one is actually ridiculous, just take his code and paste it into another file e.g. decryptText.hs and just change the following line.
+    ->  | isLower c = int2let ((let2int c + n) `mod` 26)
+        to
+    ->  | isLower c = int2let ((let2int c - n) `mod` 26)
+
+Q7. Statistical Decoder
+A7. This one is actually very involved so I'm not gonna try explain it through text. I may just send a screenshot or talk you through it.
+
+Q8. Area within a circle
+A8. To do this we need to first generate a 2D array (matrix) using a nested loop:  [[a,b] | a<-[0,(0+gap)..1], b<-[0,(0+gap)..1]] (In this gap is equal to 1/ granularity). This returns a list of points. We then iterate through this list and check that (euclidian_distance point [0,0]) < 1. we can then count the length of this list. to get the area. e.g. length [point| point<- listOfPoints, euclidean_distance point [0,0] < 1] 
+
+Q9. Computing numerical series [15]
+A9. Very simple, basically the signature should be: math_series:: (Float -> Float) -> Float -> Float
+    The bit in parentheses represents the input function and the the following Floats represent the second input parameter and then the output. Our math_series inputFunc k = sum [ inputFunc functionInputValue | functionInputValue <- [0..k]].
+
+Q10. Integral of a function  [16]
+A10. Again very simple, just use list comprehension
+
+
+Tips and Tricks:
+
+- You can create a list of characters using list comprehension [l | l<- ['a'..'z']]
+- When comparing a character e.g. letter == 'e' you sometimes may have to use "e" instead, I'm not sure why, its something to do with types.
+- Input text can be a bitch, its type is actually IOString so you need to convert it into a normal character array using the lines and then the concat function 
+    e.g.
+    main  = do
+        [filename] <- getArgs
+        contents <- readFile filename  
+        let c = lines contents 
+            res = myFunction (concat c)
+        putStrLn in_text
+        putStrLn answer
+- You will probably need to use the following libraries for some/all of your .hs files:
+    1. import System.IO  
+    2. import Data.Char as Chr
+    3. import System.Environment
+    4. import Data.List as List
+    5. import Data.List.Split
+    6. import Data.Set as Set
+    7. fst and snd are functions that take in a tuple and return the first/second element respectively
